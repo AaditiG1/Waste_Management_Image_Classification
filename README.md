@@ -1,0 +1,1 @@
+# Waste_Management_Image_Classification
