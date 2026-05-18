@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Classifier Dashboard</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- SIMPLE SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon"><i class="fas fa-seedling"></i></div>
+                <div class="brand-text">
+                    <h1>WasteAI</h1>
+                    <p>Earthy Edition</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active"><i class="fas fa-house"></i> Dashboard</a>
+            </nav>
+
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=User&background=6F4E37&color=fff" alt="User">
+                <div class="user-info">
+                    <span class="username">Admin User</span>
+                    <span class="version">v2.4.0</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN DASHBOARD -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="breadcrumbs">Home / Dashboard</div>
+            </header>
+
+            <section class="dashboard-body">
+                <h2 class="page-title">Waste Analysis Terminal</h2>
+
+                <div class="setup-grid">
+                    <!-- UPLOAD BOX -->
+                    <div class="glass-card upload-box">
+                        <div class="icon-circle"><i class="fas fa-cloud-arrow-up"></i></div>
+                        <h3>Upload Waste Image</h3>
+                        <p>Select a photo to initiate classification</p>
+                        
+                        <input type="file" id="fileInput" hidden accept="image/*">
+                        <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">
+                            Choose File
+                        </button>
+                        
+                        <div class="preview-area">
+                            <img id="imagePreview" src="#" alt="Preview" style="display:none;">
+                        </div>
+                    </div>
+
+                    <!-- CONTROL BOX -->
+                    <div class="glass-card control-box">
+                        <h3>Model Settings</h3>
+                        <p>Select the architecture to use</p>
+                        
+                        <div class="input-group">
+                            <label>Active CNN Model</label>
+                            <select id="modelSelect">
+                                <option value="resnet">Fine-Tuned ResNet-18 (Pro)</option>
+                                <option value="improved">Improved CNN (Tuned)</option>
+                                <option value="baseline">Baseline CNN (Scratch)</option>
+                            </select>
+                        </div>
+
+                        <button class="btn-primary" id="analyzeBtn" onclick="runInference()">
+                            Run Inference
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RESULT CARD -->
+                <div class="result-container" id="resultContainer" style="display: none;">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <span id="activeModelName">Model Result</span>
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                        <div class="result-content">
+                            <div class="res-box">
+                                <span class="res-sub">Classification</span>
+                                <h2 id="res-label">Organic</h2>
+                            </div>
+                            <div class="res-box">
+                                <span class="res-sub">Confidence</span>
+                                <div class="conf-row">
+                                    <h2 id="res-conf">0%</h2>
+                                    <div class="progress-bg"><div class="progress-bar" id="res-bar"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('imagePreview');
+
+        fileInput.onchange = () => {
+            const file = fileInput.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        };
+
+        async function runInference() {
+            const file = fileInput.files[0];
+            const modelType = document.getElementById('modelSelect').value;
+            const btn = document.getElementById('analyzeBtn');
+
+            if (!file) return alert("Please upload an image first!");
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('model_type', modelType);
+
+            try {
+                const res = await fetch('/predict', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                document.getElementById('resultContainer').style.display = 'block';
+                document.getElementById('res-label').innerText = data.label;
+                document.getElementById('res-conf').innerText = data.confidence;
+                document.getElementById('res-bar').style.width = data.confidence;
+                document.getElementById('activeModelName').innerText = modelType.toUpperCase() + " RESULT";
+
+                // Scroll to result
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+            } catch (err) {
+                alert("Error connecting to server.");
+            } finally {
+                btn.innerText = "Run Inference";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

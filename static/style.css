@@ -1,0 +1,93 @@
+:root {
+    --bg-latte: #FDF8F5;
+    --sidebar-cream: #F3EBE3;
+    --coffee-dark: #3E2723;
+    --coffee-medium: #6F4E37;
+    --coffee-light: #A1887F;
+    --accent-tan: #D7CCC8;
+    --white: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg-latte); color: var(--coffee-dark); overflow-x: hidden; }
+
+.app-container { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px; background: var(--sidebar-cream);
+    padding: 40px 20px; display: flex; flex-direction: column;
+    border-right: 1px solid #E0D5CC;
+}
+.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 50px; }
+.logo-icon { 
+    background: var(--coffee-medium); color: white;
+    width: 40px; height: 40px; border-radius: 12px;
+    display: grid; place-items: center; font-size: 18px;
+}
+.brand h1 { font-size: 20px; font-weight: 800; color: var(--coffee-medium); }
+.brand p { font-size: 10px; color: var(--coffee-light); }
+
+.nav-menu { flex-grow: 1; }
+.nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 15px;
+    text-decoration: none; color: var(--coffee-light); font-weight: 600;
+    border-radius: 15px; transition: 0.3s;
+}
+.nav-item.active { background: var(--coffee-medium); color: white; box-shadow: 0 4px 10px rgba(111, 78, 55, 0.2); }
+
+.user-profile { 
+    background: var(--white); padding: 12px; border-radius: 20px;
+    display: flex; align-items: center; gap: 10px; border: 1px solid #E0D5CC;
+}
+.user-profile img { width: 35px; border-radius: 50%; }
+.username { display: block; font-weight: 700; font-size: 13px; }
+.user-ver { font-size: 10px; color: var(--coffee-light); }
+
+/* CONTENT AREA */
+.main-content { flex-grow: 1; padding: 0 40px; }
+.top-header {
+    height: 70px; display: flex; align-items: center;
+    border-bottom: 1px solid #E0D5CC; margin-bottom: 30px;
+    font-size: 12px; color: var(--coffee-light); font-weight: 600;
+}
+
+.page-title { font-size: 32px; font-weight: 800; margin-bottom: 30px; color: var(--coffee-medium); }
+
+/* SETUP GRID */
+.setup-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 25px; margin-bottom: 30px; }
+.glass-card { background: var(--white); padding: 30px; border-radius: 25px; border: 1px solid #F3EBE3; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+
+.upload-box { text-align: center; border: 2px dashed var(--accent-tan); }
+.icon-circle { font-size: 30px; color: var(--accent-tan); margin-bottom: 10px; }
+.preview-area img { width: 100%; max-width: 200px; border-radius: 15px; margin-top: 20px; border: 3px solid var(--sidebar-cream); }
+
+.control-box h3 { margin-bottom: 5px; }
+.input-group { margin: 25px 0; }
+.input-group label { display: block; font-size: 11px; font-weight: 800; color: var(--coffee-light); text-transform: uppercase; margin-bottom: 8px; }
+
+select {
+    width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #E0D5CC;
+    background: var(--bg-latte); font-family: inherit; font-weight: 600; color: var(--coffee-dark);
+}
+
+/* BUTTONS */
+button { cursor: pointer; font-family: inherit; transition: 0.3s; }
+.btn-primary { width: 100%; background: var(--coffee-medium); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; }
+.btn-primary:hover { background: var(--coffee-dark); transform: translateY(-2px); }
+.btn-secondary { background: var(--sidebar-cream); color: var(--coffee-medium); border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; margin-top: 10px; }
+
+/* RESULT AREA */
+.result-container { animation: slideUp 0.5s ease-out; margin-bottom: 50px; }
+.result-card { background: var(--coffee-medium); color: white; padding: 30px; border-radius: 25px; }
+.result-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; letter-spacing: 1px; margin-bottom: 20px; opacity: 0.8; }
+
+.result-content { display: flex; gap: 50px; }
+.res-sub { font-size: 11px; font-weight: 600; opacity: 0.7; text-transform: uppercase; }
+.result-content h2 { font-size: 36px; font-weight: 800; margin-top: 5px; }
+
+.conf-row { display: flex; align-items: center; gap: 20px; }
+.progress-bg { width: 150px; height: 10px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--white); width: 0%; transition: 1s ease-in-out; }
+
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
